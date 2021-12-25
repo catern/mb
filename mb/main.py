@@ -21,6 +21,81 @@ art = [r"""
 """,
 ]
 
+big_art = [
+r"""
+//                        \\
+||   /\          /\       ||
+||   \/          \/       ||
+||      .           .     ||
+||        /\          /\  ||
+||        \/          \/  ||
+\\                        //
+""",
+r"""
+//                        \\
+||               /\       ||
+||   /\          \/       ||
+||   \/ . /\        .     ||
+||        \/          /\  ||
+||                    \/  ||
+\\                        //
+""",
+r"""
+//                        \\
+||               /\       ||
+||        /\     \/       ||
+||   /\ . \/        .     ||
+||   \/               /\  ||
+||                    \/  ||
+\\                        //
+""",
+r"""
+//                        \\
+||        /\     /\       ||
+||        \/     \/       ||
+||      .           .     ||
+||   /\               /\  ||
+||   \/               \/  ||
+\\                        //
+""",
+r"""
+//                        \\
+||       /\      /\       ||
+||       \/      \/       ||
+||      .           .     ||
+||    /\              /\  ||
+||    \/              \/  ||
+\\                        //
+""",
+r"""
+//                        \\
+||      /\       /\       ||
+||      \/       \/       ||
+||      .           .     ||
+||     /\             /\  ||
+||     \/             \/  ||
+\\                        //
+""",
+r"""
+//                        \\
+||     /\        /\       ||
+||     \/        \/       ||
+||      .           .     ||
+||      /\            /\  ||
+||      \/            \/  ||
+\\                        //
+""",
+r"""
+//                        \\
+||    /\         /\       ||
+||    \/         \/       ||
+||      .           .     ||
+||       /\           /\  ||
+||       \/           \/  ||
+\\                        //
+""",
+]
+
 def main():
     parser = argparse.ArgumentParser(
         prog="mb",
@@ -30,13 +105,23 @@ def main():
                         help='Provide warming impulses to the terminal')
     parser.add_argument('--speed', choices=["slow", "normal", "fast"],
                         default="normal",
-                        help='Speed of provision of impulses')
+                        help='Speed of impulses')
+    parser.add_argument('--big',
+                        action="store_true",
+                        help="Be big")
     args = parser.parse_args()
 
     first = True
-    for frame in itertools.cycle(art):
+    if args.big:
+        frames = big_art
+        sphere = ["/\\", '\\/']
+    else:
+        frames = art
+        sphere = ["O"]
+    for frame in itertools.cycle(frames):
         if args.warm:
-            frame = frame.replace('O', '\033[0;30;41mO\033[0;0m')
+            for elem in sphere:
+                frame = frame.replace(elem, '\033[0;30;41m' + elem + '\033[0;0m')
         if first:
             first = False
         else:
